@@ -6,7 +6,7 @@ Default is "https://someonewhocares.org/hosts/zero/hosts".
 
 <h2>Code:</h2>
 ```
-from urllib.request import urlopen
+from urllib.request import urlopen<br>
 import re
 import os
 import sys
