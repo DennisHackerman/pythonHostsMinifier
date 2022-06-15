@@ -5,6 +5,7 @@ for example: "python hostsMinifier.py www.hostsfile.com/hosts.txt"<br>
 Default is "https://someonewhocares.org/hosts/zero/hosts".
 
 <h2>Code:</h2><br>
+
 ```
 from urllib.request import urlopen
 import re
