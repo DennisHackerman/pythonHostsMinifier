@@ -1,10 +1,10 @@
 <h1>Hosts File Minifier in Python</h1>
 Downloads a text webpage and converts it to a file located in the same directory as the script. Removes Comments, unnecessary whitespaces, empty lines and checks for a regex pattern.<br>
-Can be executed with an argument to change the hosts source:<br>
-for example: "python hostsMinifier.py www.hostsfile.com/hosts.txt"<br>
-Default is "https://someonewhocares.org/hosts/zero/hosts".
+Can be executed with an argument to change the hosts source - for example:<br>
+"python hostsMinifier.py www.hostsfile.com/hosts.txt"<br>
+Default is "https://someonewhocares.org/hosts/zero/hosts".<br>
 
-<h2>Code:</h2><br>
+<h2>Code:</h2>
 
 ```
 from urllib.request import urlopen
