@@ -5,7 +5,7 @@ for example: "python hostsMinifier.py www.hostsfile.com/hosts.txt"<br>
 Default is "https://someonewhocares.org/hosts/zero/hosts".
 
 <h2>Code:</h2>
-```from urllib.request import urlopen
+`from urllib.request import urlopen
 import re
 import os
 import sys
@@ -51,4 +51,4 @@ def main():
     hostsFile.close()
 
 if __name__ == "__main__":
-    main()```
+    main()`
