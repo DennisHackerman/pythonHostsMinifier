@@ -21,7 +21,7 @@ def isRegexOK(line):
     return pattern.match(line)
 
 def main():
-    if(len(sys.argv[1]) > 1):
+    if(len(sys.argv) > 1):
         hostsSource = urlopen(sys.argv[1]).read().decode('utf-8')
     else:
         hostsSource = urlopen("https://someonewhocares.org/hosts/zero/hosts").read().decode('utf-8')
