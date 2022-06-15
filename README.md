@@ -4,9 +4,9 @@ Can be executed with an argument to change the hosts source:<br>
 for example: "python hostsMinifier.py www.hostsfile.com/hosts.txt"<br>
 Default is "https://someonewhocares.org/hosts/zero/hosts".
 
-<h2>Code:</h2>
+<h2>Code:</h2><br>
 ```
-from urllib.request import urlopen<br>
+from urllib.request import urlopen
 import re
 import os
 import sys
