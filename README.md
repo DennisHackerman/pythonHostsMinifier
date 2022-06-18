@@ -7,7 +7,7 @@ Default is "https://someonewhocares.org/hosts/zero/hosts".<br>
 <h2>Code:</h2>
 
 ```
-#!/usr/bin/env python3
+#!/usr/bin/env python
 
 from urllib.request import urlopen
 import re
