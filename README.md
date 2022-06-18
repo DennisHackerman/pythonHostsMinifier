@@ -7,6 +7,8 @@ Default is "https://someonewhocares.org/hosts/zero/hosts".<br>
 <h2>Code:</h2>
 
 ```
+#!/usr/bin/env python3
+
 from urllib.request import urlopen
 import re
 import os
@@ -27,8 +29,8 @@ def main():
 
     for line in hostsSource:
 
-        line = removeComments(line)
-        line = removeWhitespaces(line)
+        line = remove_comments(line)
+        line = remove_whitespaces(line)
 
         if not pattern.match(line):  # skip entry if it doesn't match the regex pattern
             continue
@@ -41,7 +43,8 @@ def main():
     hostsFile.close()
 
 
-def removeComments(line):
+def remove_comments(line):
+    """Removes comments from line"""
     index = line.find('#')
 
     if index != -1:
@@ -50,11 +53,12 @@ def removeComments(line):
     return line
 
 
-def removeWhitespaces(line):
+def remove_whitespaces(line):
+    """Strips line and converts multiple whitespaces to a single one"""
     line = re.sub(' +', ' ', line)
     return line.strip()
 
 
-if __name__ == "__main__":
-    main()
+
+main()
 ```
