@@ -1,53 +1,74 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 from urllib.request import urlopen
 import re
-import os
-import sys
+
+
+hosts_url = 'https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts' # StevenBlack's hosts file
+#hosts_url = 'https://someonewhocares.org/hosts/zero/hosts' # Dan Pollock's hosts file
+
+hosts_header = ( # header of final hosts file (useful local redirects)
+    '127.0.0.1 localhost',
+    '127.0.0.1 localhost.localdomain',
+    '127.0.0.1 local',
+    '255.255.255.255 broadcasthost',
+    '::1 localhost',
+    '::1 ip6-localhost',
+    '::1 ip6-loopback',
+    'fe80::1%lo0 localhost',
+    'ff00::0 ip6-localnet',
+    'ff00::0 ip6-mcastprefix',
+    'ff02::1 ip6-allnodes',
+    'ff02::2 ip6-allrouters',
+    'ff02::3 ip6-allhosts',
+
+    '127.0.0.1 kubernetes.docker.internal',
+    '0.0.0.0 0.0.0.0'
+    )
+
+# pattern and redirection address for ipv4
+entry_pattern = re.compile("([0-9]{1,3}\.){3}[0-9]{1,3}\s+(\S+\.)+\S+") # also accepts '999.999.999.999', but the adress will be removed anyway so it's fine
+redirect_address = '0.0.0.0'
 
 
 def main():
+    print('Downloading the hosts source...')
 
-    if len(sys.argv) > 1:
-        hostsSource = urlopen(sys.argv[1]).read().decode('utf-8')
+    with urlopen(hosts_url) as hosts_source:
+        print('Parsing the hosts source...')
+
+        hosts_content = hosts_source.read().decode('utf_8').split('\n') # create list of all lines in hosts source
+
+        hosts_content = {normalizeEntry(entry) for entry in hosts_content} # normalize entries, and remove duplicates by creating a set
+        hosts_content -= {entry.split()[-1] for entry in hosts_header} # remove duplicates of header entries
+        hosts_content -= {'\n','', None} # remove empty lines
+
+        with open('hosts', mode='w', encoding='utf_8') as hosts_file: # write file
+            print('Writing the output to \'hosts\'...')
+
+            for entry in hosts_header: # write header first
+                hosts_file.write(f'{entry}\n')
+
+            hosts_file.write('\n')
+
+            for domain in sorted(hosts_content): # write domain entries, sorted alphabetically
+                hosts_file.write(f'{redirect_address} {domain}\n')
+
+            print('Done!')
+
+
+def normalizeEntry(entry: str) -> str:
+    entry = entry.split('#')[0] # remove comments
+    entry = entry.strip() # remove trailing whitespaces
+
+    if isValidEntry(entry):
+        return entry.split()[-1] # return only domain
     else:
-        hostsSource = urlopen("https://someonewhocares.org/hosts/zero/hosts").read().decode('utf-8')
+        return None
 
-    hostsSource = hostsSource.split("\n")
+def isValidEntry(entry: str) -> bool:
 
-    hostsContent = "127.0.0.1 localhost\n127.0.0.1 localhost.localdomain\n127.0.0.1 local\n255.255.255.255 broadcasthost\n::1 localhost\n::1 ip6-localhost\n::1 ip6-loopback\nfe80::1%lo0 localhost\nfe00::0 ip6-localnet\nff00::0 ip6-mcastprefix\nff02::1 ip6-allnodes\nff02::2 ip6-allrouters\nff02::3 ip6-allhosts\n0.0.0.0 0.0.0.0\n"
-    pattern = re.compile("([0-9]{1,3}\.){3}[0-9]{1,3}\s\S+(\.\S+)+")
-
-    for line in hostsSource:
-
-        line = remove_comments(line)
-        line = remove_whitespaces(line)
-
-        if not pattern.match(line):  # skip entry if it doesn't match the regex pattern
-            continue
-
-        if line not in hostsContent:  # check for duplicate entries
-            hostsContent += ("\n" + line)
-
-    hostsFile = open(os.path.join(os.path.dirname(__file__), 'hosts'), 'w')
-    hostsFile.write(hostsContent)
-    hostsFile.close()
-
-
-def remove_comments(line):
-    """Removes comments from line"""
-    index = line.find('#')
-
-    if index != -1:
-        line = line.split('#')[0]
-
-    return line
-
-
-def remove_whitespaces(line):
-    """Strips line and converts multiple whitespaces to a single one"""
-    line = re.sub(' +', ' ', line)
-    return line.strip()
+    return entry_pattern.fullmatch(entry) is not None # Match object is none if it doesn't match
 
 
 
