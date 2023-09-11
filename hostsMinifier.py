@@ -4,8 +4,8 @@ from urllib.request import urlopen
 import re
 
 
-hosts_url = 'https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts' # StevenBlack's hosts file
-#hosts_url = 'https://someonewhocares.org/hosts/zero/hosts' # Dan Pollock's hosts file
+hosts_url = 'https://someonewhocares.org/hosts/zero/hosts' # Dan Pollock's hosts file
+#hosts_url = 'https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts' # StevenBlack's hosts file
 
 hosts_header = ( # header of final hosts file (useful local redirects)
     '127.0.0.1 localhost',
