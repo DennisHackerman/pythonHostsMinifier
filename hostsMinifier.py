@@ -47,12 +47,12 @@ def main():
             print('Writing the output to \'hosts\'...')
 
             for entry in hosts_header: # write header first
-                hosts_file.write(f'{entry}\n')
+                hosts_file.write('{entry}\n'.format(entry=entry))
 
             hosts_file.write('\n')
 
             for domain in sorted(hosts_content): # write domain entries, sorted alphabetically
-                hosts_file.write(f'{redirect_address} {domain}\n')
+                hosts_file.write('{address} {domain}\n'.format(address=redirect_address, domain=domain))
 
             print('Done!')
 
